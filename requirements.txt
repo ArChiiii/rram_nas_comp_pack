@@ -1,0 +1,10 @@
+numpy==1.26.4
+pandas==2.2.2
+PuLP==2.9.0
+PyYAML==6.0.2
+simpy==4.1.1
+tensorboardX==2.6.2.2
+# torch==1.13.1+cu116
+# torchvision==0.14.1+cu116
+torchinfo==1.8.0
+tqdm==4.66.5

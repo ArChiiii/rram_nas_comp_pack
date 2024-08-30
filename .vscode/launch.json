@@ -1,0 +1,63 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "test packing",
+            "type": "python",
+            "request": "launch",
+            "program": "test_packing.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--exp-id",
+                "test-new_latency",
+                // "dev-new-sim-mbv3_small-pack-same-adj+-6",
+                // "--model",
+                // "mbv3_small",
+                // // "--depth-split-factor",
+                // // "15",
+                "--find-solution",
+                // "--log-pack",
+                // "--verbose",
+                
+            ]
+        },
+        {
+            "name": "test duplicate",
+            "type": "python",
+            "request": "launch",
+            "program": "test_packing_duplicate.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--exp-id",
+                "dev-new-sim-optimize-mbv3_small-num-crossbars:150-cycle-LP-margin-0.9",
+                // "--model",
+                // "squeezenet",
+                "--num-crossbars",
+                "150",
+                "--depth-split-factor",
+                "5",
+                "--margin-factor",
+                "0.85",
+                "--log-pack",
+                "--verbose",
+            ]
+        },
+
+        {
+            "name": "run evolution",
+            "type": "python",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--exp-id",
+                "dev-evolute-NDGA-II",
+                "--num-crossbars",
+                "200",
+            ]
+        },
+    ]
+}

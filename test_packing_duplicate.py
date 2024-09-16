@@ -119,13 +119,12 @@ def main(args):
     placement_result = placement()
     
     
-    if not args.margin_factor:
-        while not placement_result or not optimize_result:
-            optimize_result = duplicate_optimizer.optimize(layout_box_space.layer_box_info_list)
-            if not optimize_result:
+    while not placement_result or not optimize_result:
+        optimize_result = duplicate_optimizer.optimize(layout_box_space.layer_box_info_list)
+        if not optimize_result:
                 break
-            else:
-                placement_result = placement()
+        else:
+            placement_result = placement()
         
     layout_box_space.save_to_json(packing_writer_path, "optimized")
     

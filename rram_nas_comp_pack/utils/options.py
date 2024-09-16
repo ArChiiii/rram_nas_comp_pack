@@ -27,7 +27,6 @@ def get_args(config_path = os.path.join(os.getcwd(),"nas_perf_sim/configs","RRAM
     parser.set_defaults(find_solution=False)
     
     #optimization
-    parser.add_argument('--margin-factor', type=float, help='margin factor for packing')
     parser.add_argument('--duplicate', dest='duplicate', action='store_true')
     parser.set_defaults(duplicate=False)
     

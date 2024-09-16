@@ -17,7 +17,6 @@ class LPDuplicateOptimizer():
         self.seed = args.seed
         self.crossbar_size = args.crossbar_size
         self.number_of_crossbars = args.num_crossbars
-        # self.margin_factor = args.margin_factor
         self.reset()
         
     def reset(self):

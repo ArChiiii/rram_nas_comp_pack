@@ -26,9 +26,10 @@ EMS Empty Mximal-Space
 '''
 
 class NetworkPacker():
-    def __init__(self, num_crossbar, crossbar_size=(128,128), pack_heuristics=True, layer_threshold=1, find_solution=False, pack_writer=None, verbose=False):
+    def __init__(self, num_crossbar, crossbar_size=(128,128), pack_heuristics=True, layer_threshold=1, xbar_max_load=6, find_solution=False, pack_writer=None, verbose=False):
         
         self.crossbar_size = crossbar_size #(128,128)
+        self.xbar_max_load = xbar_max_load
         self.crossbars = [Crossbar(self.crossbar_size) for i in range(num_crossbar)]
         
         # even infeasible solutions are possible
@@ -86,7 +87,7 @@ class NetworkPacker():
                 if EMS != None:
                     #check if there is layer_box with same exc_order in the same crossbar
                     if self.pack_heuristics:
-                        if self.crossbars[k].is_layer_conflict(layer_box, self.layer_threshold) or self.crossbars[k].is_max_loaded():
+                        if self.crossbars[k].is_layer_conflict(layer_box, self.layer_threshold) or self.crossbars[k].is_max_loaded(self.xbar_max_load):
                             continue
                         
                     selected_crossbar = k

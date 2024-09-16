@@ -83,6 +83,7 @@ def main(args):
                            crossbar_size=crossbar_size, 
                            pack_heuristics=args.pack_heuristic,
                            layer_threshold=args.layer_threshold,
+                           xbar_max_load=args.xbar_max_load,
                            find_solution=args.find_solution, 
                            pack_writer=pack_writer,
                            verbose=args.verbose)

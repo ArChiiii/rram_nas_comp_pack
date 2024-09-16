@@ -124,7 +124,7 @@ class Crossbar():
         return False
     
     
-    def is_max_loaded(self):
-        if len(self.load_items) >= 3:
+    def is_max_loaded(self, max_load):
+        if len(self.load_items) >= max_load:
             return True
         return False

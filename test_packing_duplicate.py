@@ -45,27 +45,18 @@ def setup_logger(args):
     
     setup_sim_logging(packing_writer_path)
     
-    
-    # if args.verbose:
-    #     stdout_handler = logging.StreamHandler(sys.stdout)
-    #     stdout_handler.setLevel(logging.DEBUG)
-    #     stdout_handler.setFormatter(formatter)
-    #     logger.addHandler(stdout_handler)
-    
     return packing_writer_path
 
 
 def main(args):
     def placement():
-        for i in range(10):
-            packer.reset()
-            layer_boxes = layout_box_space.get_layer_child_box()
-            # random packing sequence
-            seq = np.random.uniform(low=0.0, high=1.0, size=(len(layer_boxes)))
-            placement_result = packer.placement(layer_boxes, seq)
-            logging.info("Start placement with {} times".format(i))
-            if placement_result:
-                return placement_result
+        packer.reset()
+        layer_boxes = layout_box_space.get_layer_child_box()
+        # random packing sequence
+        seq = np.random.uniform(low=0.0, high=1.0, size=(len(layer_boxes)))
+        placement_result = packer.placement(layer_boxes, seq)
+        if placement_result:
+            return placement_result
     
     packing_writer_path = setup_logger(args)
     log_args(args)

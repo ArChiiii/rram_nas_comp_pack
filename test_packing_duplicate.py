@@ -30,10 +30,7 @@ from rram_nas_comp_pack.evaluation.network_sim_utlis import setup_sim_logging
 def setup_logger(args):
     exp_id = args.exp_id
     
-    log_writer_path = './log/evaluation/{}'.format(exp_id)
     packing_writer_path = './log/packing/{}'.format(exp_id)
-    if not os.path.exists(log_writer_path):
-        os.makedirs(log_writer_path)
     if not os.path.exists(packing_writer_path):
         os.makedirs(packing_writer_path)
 

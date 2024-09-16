@@ -428,7 +428,7 @@ class EvolutionFinder:
         
         return population_list,new_pop
 
-    def run_evolution_search(self, writer, verbose=False):
+    def run_evolution_search(self, verbose=False):
         def cal_search_score (acc, latency_ratio):
             return self.args.coef_acc*acc + self.args.coef_latency*latency_ratio
         
@@ -454,10 +454,6 @@ class EvolutionFinder:
             child_pool.append(sample)
             acc_pool.append(output.acc)
             latency_ratio_pool.append(output.latency_ratio)
-            
-            
-            writer.add_scalar('Evolution/population_acc', output.acc, _)
-            writer.add_scalar('Evolution/population_latency_ratio', output.latency_ratio, _)
             
             
         # may be replaced by acc predictor with encoded population
@@ -504,11 +500,11 @@ class EvolutionFinder:
             else:
                 best_valids.append(best_valids[-1])
             
-            if writer:
-                writer.add_scalar('Evolution/total_score', total_score, iter)
-                writer.add_scalar('Evolution/acc', acc, iter)
-                writer.add_scalar('Evolution/latency_ratio', latency_ratio, iter)
-                writer.add_scalar('Evolution/best_score', best_valids[-1], iter)
+            # if writer:
+            #     writer.add_scalar('Evolution/total_score', total_score, iter)
+            #     writer.add_scalar('Evolution/acc', acc, iter)
+            #     writer.add_scalar('Evolution/latency_ratio', latency_ratio, iter)
+            #     writer.add_scalar('Evolution/best_score', best_valids[-1], iter)
             
             logging.debug(f"[iter-{iter}] best_valids: {best_valids[-1]} from {parents[0][1]}")
             
@@ -552,7 +548,7 @@ class EvolutionFinder:
 
         return best_valids, best_info
 
-    def run_non_dominated_evolution_search(self, writer, verbose=False):
+    def run_non_dominated_evolution_search(self, verbose=False):
         """Run a single roll-out of regularized evolution to a fixed time budget."""
         max_time_budget = self.max_time_budget
         population_size = self.population_size
@@ -589,24 +585,12 @@ class EvolutionFinder:
                 
             for _ in range(population_size):
                 sample, output = self.random_sample()
-                # child_pool.append(sample)
-                # acc_pool.append(output.acc)
-                # latency_ratio_pool.append(output.latency_ratio)
-                # chroms_obj_record[_] = (output.acc, output.latency_ratio)
                 population_list.append(sample)
-            
-            
-            # writer.add_scalar('Evolution/population_acc', output.acc, _)
-            # writer.add_scalar('Evolution/population_latency_ratio', output.latency_ratio, _)
             
             
         # may be replaced by acc predictor with encoded population
         # accs = self.accuracy_predictor.predict_accuracy(child_pool)
         # logging.debug(f"Finish predict accuracy for {population_size} samples")
-        
-        
-        # for i in range(population_size):
-            # population.append((child_pool[i], acc_pool[i], latency_ratio_pool[i]))
 
         logging.info("Start Evolution...")  
         # After the population is seeded, proceed with evolving the population.
@@ -690,18 +674,7 @@ class EvolutionFinder:
                 'population': population_list,
                 'best_obj': best_obj
             }, os.path.join(self.args.ckpt_path, "ckpt.pth"))
-                
-            # if total_score > best_valids[-1]:
-            #     best_valids.append(total_score)
-            #     best_info = parents[0]
-            # else:
-            #     best_valids.append(best_valids[-1])
             
-            # if writer:
-            #     writer.add_scalar('Evolution/total_score', total_score, iter)
-            #     writer.add_scalar('Evolution/acc', best_obj[best_list[0]][0], iter)
-            #     writer.add_scalar('Evolution/latency_ratio', best_obj[best_list[0]][1], iter)
-            #     writer.add_scalar('Evolution/best_score', best_valids[-1], iter)
         
         if self.csv_writer:
             for i in range(population_size):

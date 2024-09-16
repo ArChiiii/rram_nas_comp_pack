@@ -40,21 +40,24 @@ def setup_logger(args):
     if not os.path.exists(log_writer_path):
         os.makedirs(log_writer_path)
 
-    writer = SummaryWriter(logdir=log_writer_path)
     file_handler = logging.FileHandler(os.path.join(log_writer_path, 'logs.log'))
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
     logger.addHandler(file_handler)
+
+    #for checkpoint
+    args.ckpt_path = os.path.join(log_writer_path, 'checkpoint')
+    if not os.path.exists(args.ckpt_path):
+        os.makedirs(args.ckpt_path)
+        
+    csv_writer = EvolutionWriter(log_writer_path, resume=args.resume)
     
-    sim_logger = logging.getLogger("SIM")
-    sim_logger.setLevel(logging.INFO)
-    
-    return writer
+    return csv_writer
 
 
 def main(args):
-    writer = setup_logger(args)
+    csv_writer = setup_logger(args)
     log_args(args)
     timeStr = args.exp_id
     
@@ -66,19 +69,6 @@ def main(args):
         'weight_bit': 8,
     }
     
-    log_writer_path = './log/new_evolution/{}'.format(timeStr)
-    if not os.path.exists(log_writer_path):
-        os.makedirs(log_writer_path)
-
-    #for checkpoint
-    args.ckpt_path = os.path.join(log_writer_path, 'checkpoint')
-    if not os.path.exists(args.ckpt_path):
-        os.makedirs(args.ckpt_path)
-        
-    writer = SummaryWriter(logdir=log_writer_path)
-    csv_writer = EvolutionWriter(log_writer_path, resume=args.resume)
-    
-
     if args.no_cuda:
         device = torch.device('cpu')
     else:
@@ -209,21 +199,21 @@ def main(args):
     start_time = time.time()
     
     if args.evolute_method == "ndga":
-        best_list, best_obj = evolution_finder.run_non_dominated_evolution_search(writer, verbose=True)
-    else:
-        best_valids, best_info = evolution_finder.run_evolution_search(writer, verbose=True)
+        best_list, best_obj = evolution_finder.run_non_dominated_evolution_search(verbose=True)
+    # else:
+    #     best_valids, best_info = evolution_finder.run_evolution_search(verbose=True)
         
-        result_lis.append(best_info)
-        acc, net_config, latency_ratio = best_info
-        logging.info('Final architecture config:')
-        logging.info(net_config)
-        logging.info('Final acc: '+str(acc))
-        logging.info('Final latency ratio: '+str(latency_ratio))
-        logging.info("Final score"+ best_valids)
+    #     result_lis.append(best_info)
+    #     acc, net_config, latency_ratio = best_info
+    #     logging.info('Final architecture config:')
+    #     logging.info(net_config)
+    #     logging.info('Final acc: '+str(acc))
+    #     logging.info('Final latency ratio: '+str(latency_ratio))
+    #     logging.info("Final score"+ best_valids)
         
-        ofa_net.set_active_subnet(ks=net_config['ks'], d=net_config['d'], e=net_config['e'])
-        logging.info('Architecture of the searched sub-net:')
-        logging.info(ofa_net.module_str)
+    #     ofa_net.set_active_subnet(ks=net_config['ks'], d=net_config['d'], e=net_config['e'])
+    #     logging.info('Architecture of the searched sub-net:')
+    #     logging.info(ofa_net.module_str)
         
     end_time = time.time()
     print(end_time-start_time)

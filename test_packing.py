@@ -33,7 +33,6 @@ def setup_logger(args):
     # else: # remove the old log
     #     os.system(f"rm -rf {log_writer_path}/*")
 
-    # writer = SummaryWriter(logdir=log_writer_path)
     file_handler = logging.FileHandler(os.path.join(packing_writer_path, 'logs.log'))
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
@@ -100,6 +99,7 @@ def main(args):
         sim_logger = logging.getLogger("SIM")
         num_sample = pow(2,i)
         sim_logger.debug("Start evaluation with {} samples".format(num_sample))
+        logging.info("Start evaluation with {} samples".format(num_sample))
         latency_evaluator = LatencyEvaluator(num_sample=num_sample, verbose=True)
         output = latency_evaluator.cal_ratio(layout_box_space.layer_box_info_list)
         
